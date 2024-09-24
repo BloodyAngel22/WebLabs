@@ -8,6 +8,19 @@
 }
 
 /* btn */
+.btn {
+	cursor: pointer;
+	transition: 0.3s ease;
+}
+
+.btn:hover {
+	scale: 1.05;
+}
+
+.btn:active {
+	scale: 1;
+}
+
 .purple-btn {
 	background-color: rgb(127, 3, 216);
 	color: white;
@@ -22,7 +35,7 @@
 	border-radius: 2rem;
 	border: none;
 }
-/*  */
+/*---*/
 
 .full-width-height {
 	width: 100%;
@@ -30,7 +43,8 @@
 }
 
 header {
-	position: fixed; 
+	position: absolute;
+	width: 100%;
 	top: 0; 
 	z-index: 10;
 }
@@ -41,14 +55,37 @@ header {
 	flex: 1;
 	align-items: center;
 	justify-content: space-between;
+
+	@media (mix-width: 1024px) and (max-width: 1440px) {
+		padding: calc(15px - 0.5rem) 0;
+		justify-content: space-around;
+	}
+
+	@media (max-width: 768px) {
+		padding: calc(20px - 0.5rem) 0;
+	}
 }
 
 .logo-container {
 	display: flex;
 	flex: 1;
-	padding-left: 100px;
+	padding-left: 6.25rem;
 	justify-content: start;
 	gap: 1rem;
+
+	@media (min-width: 1024px) and (max-width: 1440px) {
+		padding-left: 3rem;
+		flex: 0;
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		padding-left: 1rem;
+		flex: 0;
+	}
+
+	@media (max-width: 768px) {
+		padding-left: 1rem;
+	}
 }
 
 .logo-container > img {
@@ -65,7 +102,12 @@ header {
 	flex: 1;
 	gap: 1.5rem;
 	justify-content: end;
-	padding-right: 30px;
+	align-items: center;
+	padding-right: 2rem;
+
+	@media (max-width: 1440px) {
+		padding-right: 0.9rem;
+	}
 }
 
 .navigation > ul {
@@ -73,6 +115,24 @@ header {
 	gap: 2rem;
 	list-style-type: none;
 	color: white;
+
+	@media (min-width: 1024px) and (max-width: 1440px) {
+		gap: 1.5rem;
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		gap: 1.2rem;
+	}
+}
+
+.navigation > ul > li > a {
+	text-decoration: none;
+	color: white;
+}
+
+.navigation > ul > li > a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3.6rem;
 }
 
 .search-input {
@@ -80,7 +140,6 @@ header {
 	padding: 0.75rem 1.5rem;
 	border: 1px solid #ccc;
 	border-radius: 2rem;
-	margin-top: -0.75rem;
 	background: url('/assets/fa-search.png') no-repeat 170px center;
 	background-color: white;
 	font-size: 0.85rem;
@@ -92,6 +151,73 @@ header {
 
 .search-input:focus {
 	outline: none;
+}
+
+.burger-checkbox {
+	display: none;
+	box-shadow: none;
+	appearance: none;
+}
+
+.burger {
+	margin-right: 1rem;
+	display: none;
+	width: 2.5rem;
+	height: 2.5rem;
+	background: url('/assets/burger.svg') no-repeat center;
+	background-size: contain;
+	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+	outline: none;
+	box-shadow: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.burger-checkbox:checked ~ .burger {
+	transform: rotate(90deg);
+	outline: none;
+	box-shadow: none;
+}
+
+@media (max-width: 768px) {
+	.burger {
+		display: block;
+		outline: none;
+		box-shadow: none;
+	}
+
+	.navigation {
+		display: none;
+		position: absolute;
+		margin-top: -2rem;
+		top: 100%;
+		right: 0;
+		background-color: #fff;
+		padding: 0.5rem;
+		border-radius: 0.5rem;
+	}
+
+	.navigation > ul {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.navigation li {
+		margin-bottom: 0.5rem;
+	}
+
+	.navigation > ul > li > a {
+		text-decoration: none;
+		color: black;
+	}
+
+	.navigation > ul > li > a:hover {
+		text-decoration: none;
+	}
+
+	.burger-checkbox:checked ~ .navigation {
+		display: block;
+	}
 }
 
 .divider {
@@ -110,12 +236,28 @@ header {
 	width: 100%;
 	height: auto;
 	display: block;
+	object-fit: cover;
+
+	@media (max-width: 768px) {
+		height: 400px;
+	}
+}
+
+.image-text-container {
+	width: 100%;
+	position: relative;
+	display: flex;
+}
+
+.image-text-container img {
+	width: 50%;
+	height: auto;
+	display: block;
+	object-fit: cover;
 }
 
 .overlay {
 	position: absolute;
-	/* width: 100%;
-	height: 100%; */
 }
 
 .canyon-elem-position {
@@ -129,17 +271,56 @@ header {
 	align-items: end; 
 	margin-top: 50px; 
 	margin-left: -100px;
+
+	@media (min-width: 1024px) and (max-width: 1440px) {
+		margin-left: -50px;
+		width: 65%;
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		margin-left: -35px;
+		width: 70%;
+	}
+
+	@media (max-width: 768px) {
+		margin-left: 0rem;
+		width: auto;
+		align-items: center;
+		justify-content: center;
+	}
 }
 
 .canyon-elem-position > h3 {
 	font-size: 3rem; 
-	padding-left: 300px; 
+	padding-left: 18.75rem; 
 	text-align: end; 
 	font-weight: normal;
+
+	@media (min-width: 1024px) and (max-width: 1440px) {
+		padding-left: 15.5rem;
+		font-size: 2.5rem;
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		padding-left: 6.5rem;
+		font-size: 2rem;
+		text-align: center;
+	}
+
+	@media (max-width: 768px) {
+		padding-left: 0rem;
+		font-size: 1.5rem;
+		text-align: center;
+	}
 }
 
 .canyon-elem-position > button {
 	margin-top: 2rem;
+
+	@media (max-width: 768px) {
+		margin-top: 1rem;
+		display: block;
+	}
 }
 
 .canyon-elem-position > p {
@@ -150,8 +331,19 @@ header {
 
 .gray-rect {
 	width: 100%; 
-	height: 600px; 
+	height: 600px;
 	background-color: #2d3a4d;
+	display: block;
+	position: relative;
+
+	@media (max-width: 768px) {
+		height: auto;
+		min-height: 650px; 
+	}
+	@media (max-width: 480px) {
+		height: auto;
+		min-height: 750px;
+	}
 }
 
 .gray-rect-container {
@@ -160,11 +352,22 @@ header {
 	justify-content: center; 
 	align-items: center;  
 	height: inherit;
+
+	@media (max-width: 768px) {
+		height: auto;
+		justify-content: baseline;
+		align-items: baseline;
+		min-height: 650px;
+	}
 }
 
 .gray-rect-box {
 	height: 400px; 
 	width: 800px;
+
+	@media (max-width: 768px) {
+		margin-top: 2rem;
+	}
 }
 
 .gray-rect-box > div {
@@ -174,61 +377,115 @@ header {
 	align-items: center; 
 	height: inherit; 
 	flex-wrap: wrap;
+
+	@media (max-width: 768px) {
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: baseline;
+		height: auto;
+	}
 }
 
 .gray-rect-box .gray-rect-box-items-position {
 	flex: 0 0 47.5%;
 	color: white; 
+	margin-bottom: 2rem;
+
+	@media (max-width: 768px) {
+		flex: 0;
+	}
 }
 
 .gray-rect-box-items-position > h4 {
 	text-transform: uppercase;
+
+	@media (max-width: 768px) {
+		text-align: center;
+	}
 }
 
 .gray-rect-box-items-position > p {
-	margin-top: 1.5rem;;
+	margin-top: 1rem;
+
+	@media (max-width: 768px) {
+		padding: 0 1.75rem;
+	}
 }
 
 .gray-rect-speech {
-	position: absolute; 
-	top: 0; 
-	margin-top: 110px; 
-	width: 100%; 
-	height: auto; 
-	z-index: 1;
+	margin-top: 9rem;
+}
+
+.gray-rect-speech > img {
+	z-index: 1; 
+	position: relative;
+
+	@media (max-width: 768px) {
+		margin-top: -4rem;
+	}
+
+	@media (max-width: 550px)
+	{
+		display: none;
+	}
 }
 
 .pink-forest-container {
 	position: absolute; 
 	display: flex; 
-	width: 100%; 
-	height: 100%; 
 	justify-content: center; 
 	align-items: center; 
 	flex-direction: column; 
 	gap: 1.25rem;
+
+	@media (max-width: 768px) {
+		gap: 0.5rem;
+	}
 }
 
 .pink-forest-container > h3 {
 	color: white; 
 	font-size: 2rem; 
 	font-weight: normal;
+	padding: 0 1rem;
 }
 
 .pink-forest-container > p {
 	width: 380px; 
 	color: white; 
 	text-align: center;
+
+	@media (max-width: 768px) {
+		width: auto;
+	}
 }
 
 .pink-forest-container > button {
 	margin-top: 1rem; 
+
+	@media (max-width: 768px) {
+		margin-top: 0.25rem;
+	}
 }
 
 .paperwork-text-container {
-	padding: 100px; 
-	padding-right: 200px; 
+	padding: 6.25rem; 
+	padding-right: 12.5rem; 
 	color: gray;
+
+	@media (min-width: 1024px) and (max-width: 1440px) {
+		padding: 5.5rem;
+		padding-right: 5.5rem;
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		padding: 4.5rem;
+		padding-right: 3.5rem;
+	}
+
+	@media (max-width: 768px) {
+		padding: 1.25rem;
+	}
 }
 
 .paperwork-text-container > h4 {
@@ -242,30 +499,43 @@ header {
 
 .hills-img {
 	position: absolute; 
+	display: block;
 	bottom: 0;
 }
 
 .hills-container {
 	position: absolute; 
 	display: flex; 
-	width: 100%; 
-	height: 100%; 
 	justify-content: center; 
 	align-items: center; 
 	flex-direction: column; 
 	gap: 1.25rem; 
 	color: white;
+
+	@media (max-width: 768px) {
+		gap: 0.5rem;
+	}
 }
 
 .hills-container > h3 {
 	font-size: 2.5rem; 
 	font-weight: normal;
+
+	@media (max-width: 768px) {
+		font-size: 1.5rem;
+	}
 }
 
 .hills-container > p {
 	width: 600px; 
 	text-align: center; 
 	font-size: 1.25rem;
+
+	@media (max-width: 768px) {
+		font-size: 0.875rem;
+		padding: 0 1rem;
+		width: auto;
+	}
 }
 
 .hills-container .description {
@@ -274,29 +544,55 @@ header {
 	font-size: 0.75rem;
 }
 
+.hills-container > button {
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
+
+	@media (max-width: 768px) {
+		margin-top: 0.25rem;
+	}
+}
+
 .food-container {
 	display: flex; 
 	position: absolute; 
-	width: 100%; 
-	height: 100%;
+	height: auto;
 }
 
 .food-container > .food-box {
 	display: flex; 
-	width: 100%; 
-	height: 100%; 
 	flex-direction: column; 
 	justify-content: end; 
 	gap: 1.25rem;
 }
 
 .food-box > .food-box-text {
-	padding: 100px; 
-	padding-left: 200px; 
+	padding: 6.25rem; 
+	padding-left: 12.5rem; 
 	color: white; 
 	display: flex; 
 	gap: 1.25rem; 
 	flex-direction: column;
+
+	@media (min-width: 1024px) and (max-width: 1440px) {
+		padding: 5.5rem;
+		padding-left: 10.5rem;
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		padding: 4.5rem;
+		padding-left: 8.5rem;
+	}
+
+	@media (max-width: 768px) {
+		padding: 3.5rem;
+		padding-left: 6.5rem;
+	}
+
+	@media (max-width: 425px) {
+		padding: 2.5rem;
+		padding-left: 4.5rem;
+	}
 }
 
 .food-box-text > .tag {
@@ -311,18 +607,36 @@ header {
 	font-size: 2rem; 
 	font-weight: normal; 
 	width: 40%;
+
+	@media (max-width: 768px) {
+		width: 100%;
+		font-size: 1.5rem;
+	}
 }
 
 .hand-container {
 	display: flex; 
-	width: 100%; 
-	height: 100%;
+	height: auto;
 }
 
 .hand-container > .hand-box {
-	padding: 200px; 
-	padding-top: 100px; 
+	padding: 12.5rem; 
+	padding-top: 6.25rem; 
 	color: gray;
+
+	@media (min-width: 1024px) and (max-width: 1440px) {
+		padding: 5.5rem;
+		padding-right: 5.5rem;
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		padding: 4.5rem;
+		padding-right: 3.5rem;
+	}
+
+	@media (max-width: 768px) {
+		padding: 1.25rem;
+	}
 }
 
 .hand-box > h4 {
@@ -344,14 +658,26 @@ header {
 
 .pink-rect-container > .pink-rect-box {
 	display: flex; 
-	width: 100%; 
-	height: 100%;
 }
 
 .pink-rect-box > .pink-rect-box-text {
-	padding: 200px; 
-	padding-top: 100px; 
+	padding: 12.5rem; 
+	padding-top: 6.25rem; 
 	color: white;
+
+	@media (min-width: 1024px) and (max-width: 1440px) {
+		padding: 10.5rem;
+		padding-top: 4.5rem;
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		padding: 7.5rem;
+		padding-top: 3.5rem;
+	}
+
+	@media (max-width: 768px) {
+		padding: 2rem;
+	}
 }
 
 .pink-rect-box-text > h4 {
@@ -362,6 +688,11 @@ header {
 .pink-rect-box-text > p {
 	margin-bottom: 1.5rem;
 	width: 400px;
+
+	@media (max-width: 768px)
+	{
+		width: auto;
+	}
 }
 
 .email-link {
@@ -376,15 +707,27 @@ footer {
 }
 
 footer > .footer-container {
-	width: 100%; 
-	height: 100%; 
 	display: flex; 
 	color: white;
 }
 
 .footer-container > .footer-text-container {
-	padding: 200px; 
-	padding-top: 100px;
+	padding: 12.5rem; 
+	padding-top: 6.25rem;
+
+	@media (min-width: 1024px) and (max-width: 1440px) {
+		padding: 10.5rem;
+		padding-top: 4.5rem;
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		padding: 7.5rem;
+		padding-top: 3.5rem;
+	}
+
+	@media (max-width: 768px) {
+		padding: 2rem;
+	}
 }
 
 .footer-text-container > p {
