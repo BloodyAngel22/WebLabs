@@ -189,7 +189,7 @@ header {
 	.navigation {
 		display: none;
 		position: absolute;
-		margin-top: -2rem;
+		margin-top: -1rem;
 		top: 100%;
 		right: 0;
 		background-color: #fff;
@@ -331,7 +331,7 @@ header {
 
 .gray-rect {
 	width: 100%; 
-	height: 600px;
+	height: 450px;
 	background-color: #2d3a4d;
 	display: block;
 	position: relative;
@@ -357,16 +357,18 @@ header {
 		height: auto;
 		justify-content: baseline;
 		align-items: baseline;
-		min-height: 650px;
+		min-height: 550px;
 	}
 }
 
 .gray-rect-box {
-	height: 400px; 
+	height: 250px; 
 	width: 800px;
+	margin-top: 1rem;
 
 	@media (max-width: 768px) {
-		margin-top: 2rem;
+		margin-top: 4rem;
+		min-height: inherit;
 	}
 }
 
@@ -377,12 +379,14 @@ header {
 	align-items: center; 
 	height: inherit; 
 	flex-wrap: wrap;
+	margin-top: -2rem;
 
 	@media (max-width: 768px) {
 		flex-direction: column;
 		flex-wrap: nowrap;
-		justify-content: baseline;
+		justify-content: center;
 		height: auto;
+		min-height: inherit;
 	}
 }
 
@@ -413,7 +417,7 @@ header {
 }
 
 .gray-rect-speech {
-	margin-top: 9rem;
+	margin-top: 1rem;
 }
 
 .gray-rect-speech > img {
@@ -421,11 +425,7 @@ header {
 	position: relative;
 
 	@media (max-width: 768px) {
-		margin-top: -4rem;
-	}
-
-	@media (max-width: 550px)
-	{
+		/* margin-top: -4rem; */
 		display: none;
 	}
 }
@@ -470,7 +470,7 @@ header {
 
 .paperwork-text-container {
 	padding: 6.25rem; 
-	padding-right: 12.5rem; 
+	padding-right: 10.5rem; 
 	color: gray;
 
 	@media (min-width: 1024px) and (max-width: 1440px) {
@@ -556,7 +556,7 @@ header {
 .food-container {
 	display: flex; 
 	position: absolute; 
-	height: auto;
+	height: 100%;
 }
 
 .food-container > .food-box {
@@ -614,13 +614,22 @@ header {
 	}
 }
 
+.food-box-text > .author {
+	display: flex; flex: 1; gap: 0.7rem; align-items: center;
+}
+
+.author > img {
+	width: 40px;
+	height: auto;
+}
+
 .hand-container {
 	display: flex; 
 	height: auto;
 }
 
 .hand-container > .hand-box {
-	padding: 12.5rem; 
+	padding: 8.5rem; 
 	padding-top: 6.25rem; 
 	color: gray;
 
@@ -713,7 +722,7 @@ footer > .footer-container {
 
 .footer-container > .footer-text-container {
 	padding: 12.5rem; 
-	padding-top: 6.25rem;
+	padding-top: 3.25rem;
 
 	@media (min-width: 1024px) and (max-width: 1440px) {
 		padding: 10.5rem;
