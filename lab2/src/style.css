@@ -824,7 +824,6 @@ footer > .footer-container {
 	overflow-y: auto;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-around;
 	gap: 1rem;
 }
 
@@ -835,6 +834,7 @@ footer > .footer-container {
 	border-radius: 2rem;
 	margin-bottom: .5rem;
 	color: whitesmoke;
+	height: max-content;
 }
 
 .product-card-container > img {

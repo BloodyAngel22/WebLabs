@@ -3,8 +3,9 @@ import { filterTypes } from "./dataList.js";
 
 function displayProducts(pens, filterTypes) {
 	const productBox = document.querySelector('div #product-box');
+	productBox.innerHTML = '';
 
-	pens.forEach(item => {
+	pens.sort((a, b) => a.title.localeCompare(b.title)).forEach(item => {
 		const product = document.createElement('div');
 		product.classList.add('product-card-container');
 
@@ -26,6 +27,8 @@ function displayProducts(pens, filterTypes) {
 
 function displayFilters(pens, filterTypes) {
 	const filterBox = document.querySelector('#filter');
+	filterBox.innerHTML = '';
+
 	if (!filterBox) {
 		console.error('Filter box not found');
 		return;
@@ -55,7 +58,7 @@ function displayFilter(pens, filterType) {
 	divFilter.querySelectorAll('input[type="checkbox"]')
 		.forEach(checkbox => {
 			checkbox.addEventListener('change', () => {
-				filterProducts(pens);
+				filteredProducts(pens);
 			})
 		})
 
@@ -68,7 +71,7 @@ function uniqueFilterData(pens, liType) {
 	return uniqueList;
 }
 
-function filterProducts(pens) {
+function filteredProducts(pens) {
 	const selectedFilters = {};
 	const checkBoxes = document.querySelectorAll('#filter input[type="checkbox"]');
 	checkBoxes.forEach(checkbox => {
@@ -80,9 +83,52 @@ function filterProducts(pens) {
 			selectedFilters[filterType].push(checkbox.value);
 		}
 	});
-	console.log(selectedFilters);
+	// console.log(selectedFilters);
 
+	const filteredPens = pens.filter(pen => {
+		return Object.entries(selectedFilters).every(([filterType, values]) => {
+			if (values.length === 0) {
+				return true;
+			}
+			return values.includes(pen[filterType]);
+		}) 
+	})
+	// console.log(filteredPens);
+
+	blockNotUsedCheckboxFilters(filteredPens, filterTypes);
 	displayProducts(filteredPens, filterTypes);
+}
+
+function blockNotUsedCheckboxFilters(filteredPens, filterTypes) {
+	const usedFilterTypes = getUsedFilters(filteredPens, filterTypes);
+	console.log(usedFilterTypes);
+
+	const checkBoxes = document.querySelectorAll('#filter input[type="checkbox"]');
+	checkBoxes.forEach(checkbox => {
+		const filterType = checkbox.getAttribute('id').split('-')[0];
+		if (!usedFilterTypes[filterType].includes(checkbox.value)) {
+			checkbox.disabled = true;
+		} else {
+			checkbox.disabled = false;
+		}
+	});
+}
+
+function getUsedFilters(filteredPens, filter) {
+	const usedFilterTypes = {};
+
+	filteredPens.forEach(item => {
+		Object.entries(item).forEach(([key, value]) => {
+			if (filter[key]) {
+				if (!usedFilterTypes[key]) {
+					usedFilterTypes[key] = [];
+				}
+				usedFilterTypes[key].push(value);
+			}
+		})
+	})
+
+	return usedFilterTypes;
 }
 
 displayProducts(pens, filterTypes);
