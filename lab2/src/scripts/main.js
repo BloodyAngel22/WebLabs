@@ -101,7 +101,7 @@ function filteredProducts(pens) {
 
 function blockNotUsedCheckboxFilters(filteredPens, filterTypes) {
 	const usedFilterTypes = getUsedFilters(filteredPens, filterTypes);
-	console.log(usedFilterTypes);
+	// console.log(usedFilterTypes);
 
 	const checkBoxes = document.querySelectorAll('#filter input[type="checkbox"]');
 	checkBoxes.forEach(checkbox => {
