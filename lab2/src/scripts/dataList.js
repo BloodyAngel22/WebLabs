@@ -1,22 +1,3 @@
-export let data = [
-	{
-		id: 1,
-		title: "Step 1: Create an account",
-	},
-	{
-		id: 2,
-		title: "Step 2: Add your photos",
-	},
-	{
-		id: 3,
-		title: "Step 3: Add your photos",
-	},
-	{
-		id: 4,
-		title: "Step 4: Add your photos",
-	}
-];
-
 export let pens = [
 	{
 		id: 1,
@@ -127,3 +108,10 @@ export let pens = [
 		img: "../../assets/products/pen12.webp"
 	}
 ]
+
+export let filterTypes = {
+	penType: 'Вид ручки',
+	inkColor: 'Цвет чернил',
+	material: 'Материал',
+	color: 'Цвет'
+}

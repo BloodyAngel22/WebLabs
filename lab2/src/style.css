@@ -785,7 +785,7 @@ footer > .footer-container {
 .filter-list > div {
 	margin-bottom: 1rem;
 	width: 85%;
-	outline: 2px solid #2d3a4d;
+	outline: 4px solid #2d3a4d;
 	padding: .35rem;
 	padding-left: .5rem;
 	border-radius: 1rem;
@@ -805,6 +805,15 @@ footer > .footer-container {
 	display: flex;
 	align-items: center;
 	gap: .5rem;
+}
+
+.filter-list > div > ul > li > input[type="checkbox"] {
+	height: 1.2rem;
+	width: 1.2rem;
+}
+
+.filter-list > div > ul > li > label {
+	font-size: 1.3rem;
 }
 
 .product-filter-box > .product-box {
