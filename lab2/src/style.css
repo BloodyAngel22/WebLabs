@@ -851,7 +851,6 @@ footer > .footer-container {
 	overflow-y: auto;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-around;
 	gap: 1rem;
 
 	@media (min-width: 1024px) and (max-width: 1444px) {
@@ -868,6 +867,7 @@ footer > .footer-container {
 		width: 55%;
 		gap: .5rem;
 		padding: .5rem;
+		justify-content: space-around;
 	}
 }
 
@@ -890,6 +890,7 @@ footer > .footer-container {
 
 	@media (max-width: 768px) {
 		width: 80%;
+		margin-bottom: 1.5rem;
 	}
 }
 
