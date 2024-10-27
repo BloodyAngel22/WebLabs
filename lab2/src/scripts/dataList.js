@@ -44,15 +44,15 @@ export let pens = [
 		color: "Черный",
 		img: "../../assets/products/pen5.webp"
 	},
-	{
-		id: 6,
-		title: "Ручка шариковая автоматическая Luxor Window",
-		penType: "Шариковая",
-		inkColor: "Черный",
-		material: "Пластик",
-		color: "Синий",
-		img: "../../assets/products/pen6.webp"
-	},
+	// {
+	// 	id: 6,
+	// 	title: "Ручка шариковая автоматическая Luxor Window",
+	// 	penType: "Шариковая",
+	// 	inkColor: "Черный",
+	// 	material: "Пластик",
+	// 	color: "Синий",
+	// 	img: "../../assets/products/pen6.webp"
+	// },
 	{
 		id: 7,
 		title: "Delucci Ручка Перьевая",
@@ -89,15 +89,15 @@ export let pens = [
 		color: "Прозрачный",
 		img: "../../assets/products/pen10.webp"
 	},
-	{
-		id: 11,
-		title: "Ручка гелевая Brauberg X-ERASE",
-		penType: "Гелевая",
-		inkColor: "Синий",
-		material: "Пластик",
-		color: "Синий",
-		img: "../../assets/products/pen11.webp"
-	},
+	// {
+	// 	id: 11,
+	// 	title: "Ручка гелевая Brauberg X-ERASE",
+	// 	penType: "Гелевая",
+	// 	inkColor: "Синий",
+	// 	material: "Пластик",
+	// 	color: "Синий",
+	// 	img: "../../assets/products/pen11.webp"
+	// },
 	{
 		id: 12,
 		title: 'Гелевая ручка Bruno Visconti "Egoiste. BLUE"',
@@ -106,12 +106,66 @@ export let pens = [
 		material: "Пластик",
 		color: "Черный",
 		img: "../../assets/products/pen12.webp"
-	}
+	},
+	// {
+	// 	id: 13,
+	// 	title: 'Ручка Brauberg Kids многоцветная',
+	// 	penType: 'Шариковая',
+	// 	inkColor: 'Разноцветный',
+	// 	material: 'Пластик',
+	// 	color: 'Прозрачный',
+	// 	img: '../../assets/products/pen13.webp'
+	// },
+	// {
+	// 	id: 14,
+	// 	title: 'Ручка KUROMI CINNAMOROLL 6-ти цветная',
+	// 	penType: 'Шариковая',
+	// 	inkColor: 'Разноцветный',
+	// 	material: 'Пластик',
+	// 	color: 'Белый',
+	// 	img: '../../assets/products/pen14.webp'
+	// },
+	{
+		id: 15,
+		title: 'Перьевая ручка Waterman Expert-Black GT',
+		penType: 'Перьевая',
+		inkColor: 'Синий',
+		material: 'Металл',
+		color: 'Черный',
+		img: '../../assets/products/pen15.webp'
+	},
+	{
+		id: 16,
+		title: 'Ручка перьевая Lamy 017 safari',
+		penType: 'Перьевая',
+		inkColor: 'Синий',
+		material: 'Пластик',
+		color: 'Серебристый',
+		img: '../../assets/products/pen16.webp'
+	},
+	// {
+	// 	id: 17,
+	// 	title: 'Ручка Шариковая Pilot',
+	// 	penType: 'Шариковая',
+	// 	inkColor: 'Красный',
+	// 	material: 'Пластик',
+	// 	color: 'Прозрачный',
+	// 	img: '../../assets/products/pen17.webp'
+	// },
+	// {
+	// 	id: 18,
+	// 	title: 'Ручка гелевая G-TONE',
+	// 	penType: 'Гелевая',
+	// 	inkColor: 'Красный',
+	// 	material: 'Пластик',
+	// 	color: 'Красный',
+	// 	img: '../../assets/products/pen18.webp'
+	// }
 ]
 
 export let filterTypes = {
 	penType: 'Вид ручки',
 	inkColor: 'Цвет чернил',
 	material: 'Материал',
-	color: 'Цвет'
+	color: 'Цвет ручки'
 }
