@@ -1,216 +1,159 @@
 import { pens } from "./dataList.js";
 import { filterTypes } from "./dataList.js";
 
-function displayProducts(pens, filterTypes) {
-	const productBox = document.querySelector('div #product-box');
-	productBox.innerHTML = '';
+// Генерация возможных значений для фильтров на основе товаров
+function generateFilterValues(pens) {
+  const filterValues = {};
 
-	pens.sort((a, b) => a.title.localeCompare(b.title)).forEach(item => {
-		const product = document.createElement('div');
-		product.classList.add('product-card-container');
+  // Для каждого типа фильтра создаем уникальный набор значений
+  Object.keys(filterTypes).forEach((filterType) => {
+    filterValues[filterType] = [...new Set(pens.map((pen) => pen[filterType]))];
+  });
 
-		product.innerHTML = `
-			<img src="${item.img}" alt="${item.title}">
-			<h3>${item.title}</h3>
-			<h5>Характеристики:</h5>
-			${Object.entries(item).map(([key, value]) => {
-				if (filterTypes[key]) {
-					return `<p><span>${filterTypes[key]}:</span> ${value}</p>`;
-				}
-				return '';
-			}).join('')}
-		`;
-
-		productBox.appendChild(product);
-	});
+  return filterValues;
 }
 
-function displayFilters(pens, filterTypes) {
-	const filterBox = document.querySelector('#filter');
-	filterBox.innerHTML = '';
-
-	if (!filterBox) {
-		console.error('Filter box not found');
-		return;
-	}
-
-	Object.entries(filterTypes).forEach(([filterType, filterTitle]) => {
-		const filter = displayFilter(pens, filterType);
-		filterBox.appendChild(filter);
-	});
-}
-let currentCheckbox = null;
-
-function displayFilter(pens, filterType) {
-	const filterList = uniqueFilterData(pens, filterType);
-	const divFilter = document.createElement('div');
-	divFilter.innerHTML = `
-		<h3>${filterTypes[filterType]}</h3>
-		<ul>
-			${filterList
-        .map(
-          (item, index) =>
-            `<li><input type="checkbox" id="${filterType}-${index}" value="${item}"><label for="${item}">${item}</label></li>`
-        )
-        .join("")}
-		</ul>
-	`;
-
-	divFilter.querySelectorAll('input[type="checkbox"]')
-		.forEach(checkbox => {
-			checkbox.addEventListener('change', () => {
-				currentCheckbox = checkbox;
-				filteredProducts(pens);
-			})
-		})
-
-	return divFilter;
-}
-
-function uniqueFilterData(pens, liType) {
-	const uniqueList = [...new Set(pens.map(item => item[liType]))];
-
-	return uniqueList;
-}
-
-function filteredProducts(pens) {
-	const selectedFilters = {};
-	const checkBoxes = document.querySelectorAll('#filter input[type="checkbox"]');
-	// console.log(checkBoxes);
-	checkBoxes.forEach(checkbox => {
-		const filterType = getCheckboxType(checkbox);
-		if (!selectedFilters[filterType]) {
-			selectedFilters[filterType] = [];
-		}
-		if (checkbox.checked) {
-			selectedFilters[filterType].push(checkbox.value);
-		}
-	});
-	// console.log(selectedFilters);
-
-	const filteredPens = pens.filter(pen => {
-		let result = true;
-		Object.entries(selectedFilters).forEach(([filterType, values]) => {
-			if (values.length > 0 && !values.includes(pen[filterType])) {
-				result = false;
-			}
-		});
-
-		return result;
-	});
-	// console.log(filteredPens);
-
-	getUnreachableCheckboxFilters(filteredPens, filterTypes);
-	displayProducts(filteredPens, filterTypes);
-
-	// console.log(getCheckboxType(currentCheckbox));
-}
-
-
-//Список предыдущих заблокированных checkbox
-let previousDisabledCheckboxes = [];
-
-//Список предыдущих выбранных checkbox
-let previousActiveCheckboxes = [];
-
-//Список текущих выбранных checkbox
-let currentActiveCheckboxes = [];
-
-function getUnreachableCheckboxFilters(filteredPens, filterTypes) {
-  //Список заблокированных checkbox
-	let disabledCheckboxes = [];
-  const usedFilters = getUsedProductFilters(filteredPens, filterTypes);
-  // console.log(usedFilters);
-
-  const checkboxes = document.querySelectorAll(
-    '#filter input[type="checkbox"]'
-  );
-  const activeCheckboxes = document.querySelectorAll(
-    '#filter input[type="checkbox"]:checked'
-  );
-  currentActiveCheckboxes = activeCheckboxes;
-
-  // console.log("new", currentActiveCheckboxes);
-  // console.log("old", previousActiveCheckboxes);
-
-  if (activeCheckboxes.length === 0) {
-    disabledCheckboxes = [];
+// Отображение списка товаров
+function renderProducts(pens) {
+  let html = "";
+  if (pens.length === 0) {
+    html = `<div class="no-products">Товаров нет в наличии.</div>`;
   } else {
-    checkboxes.forEach((checkbox) => {
-      const filterType = getCheckboxType(checkbox);
-      //&& если disableCheckboxes не содержит данный checkbox && не текущий тип фильтра
-      if (
-        !usedFilters[filterType].includes(checkbox.value) &&
-				!disabledCheckboxes.includes(checkbox) &&
-				filterType !== getCheckboxType(currentCheckbox)
-      ) {
-        disabledCheckboxes.push(checkbox);
-      }
+    pens.forEach((pen) => {
+      let characteristicsHtml = "<h5>Характеристики:</h5>";
+
+      // Цикл по каждому типу фильтра для отображения его значения
+      Object.keys(filterTypes).forEach((key) => {
+        characteristicsHtml += `<p>${filterTypes[key]}: ${pen[key]}</p>`;
+      });
+
+      html += `
+        <div class="product-card-container">
+          <img src="${pen.img}" alt="${pen.title}">
+          <h3>${pen.title}</h3>
+          ${characteristicsHtml}
+        </div>
+      `;
+    });
+  }
+  const productBox = document.querySelector("#product-box");
+  productBox.innerHTML = html;
+}
+
+// Отображение всех фильтров
+function renderFilters(filterValues) {
+  Object.keys(filterValues).forEach((filterType) => {
+    renderFilter(filterType, filterValues[filterType]);
+  });
+}
+
+// Отображение конкретного фильтра и его значений
+function renderFilter(filterType, values) {
+  let html = `
+	<h3>${filterTypes[filterType]}</h3>
+	<ul>`;
+  const currentPens = filterPens(pens, true);
+
+  // Получаем все активные чекбоксы для текущего состояния фильтрации
+  const activeCheckboxes = document.querySelectorAll(
+    `input[type="checkbox"]:checked`
+  );
+  const activeFilters = {};
+  activeCheckboxes.forEach((checkbox) => {
+    activeFilters[checkbox.name] = activeFilters[checkbox.name] || [];
+    activeFilters[checkbox.name].push(checkbox.id.split("-")[1]);
+  });
+
+  // Проходим по каждому значению фильтра для отображения чекбоксов
+  values.forEach((value) => {
+    const isChecked = activeFilters[filterType]?.includes(value) || false;
+
+    // Создаем временные фильтры для проверки текущего значения фильтра
+    const tempFilters = JSON.parse(JSON.stringify(activeFilters));
+    if (!isChecked) {
+      tempFilters[filterType] = [...(tempFilters[filterType] || []), value];
+    }
+
+    // Подсчитываем количество товаров, соответствующих фильтру
+    const count = getCountResultsByFilter(pens, filterType, value, tempFilters);
+    const modifiedPens = pens.filter((pen) => {
+      return Object.keys(tempFilters).every((key) => {
+        return tempFilters[key].some((filterValue) => pen[key] === filterValue);
+      });
     });
 
+    // Проверка на отключение фильтра, если он не влияет на количество товаров
+    const isDisabled =
+      !isChecked && (count === 0 || modifiedPens.length === currentPens.length)
+        ? "disabled"
+        : "";
+
+    html += `
+		<li>
+			<input type="checkbox" name="${filterType}" id="${filterType}-${value}" ${
+      isChecked ? "checked" : ""
+    } ${isDisabled}>
+			<p>${value}</p><span>(${count})</span>
+		</li>
+		`;
+  });
+  html += `</ul>`;
+
+  // Проверка, существует ли элемент фильтра на странице, и создание, если его нет
+  let filter = document.getElementById(filterType);
+  if (!filter) {
+    filter = document.createElement("div");
+    filter.id = filterType;
+    document.querySelector("#filter.filter-list").appendChild(filter);
   }
+  filter.innerHTML = html;
 
-  disableCheckboxesFromArray(disabledCheckboxes);
-
-  previousDisabledCheckboxes = disabledCheckboxes;
-
-  previousActiveCheckboxes = currentActiveCheckboxes;
+  // Добавление обработчиков событий для изменения состояния фильтров
+  document.querySelectorAll(`#${filterType} input`).forEach((input) => {
+    input.addEventListener("change", () => {
+      const filteredPens = filterPens(pens);
+      renderProducts(filteredPens);
+      renderFilters(filterValues); // Обновляем фильтры для пересчёта доступных значений
+    });
+  });
 }
 
-function disableCheckboxesFromArray(disableCheckboxes) {
-	const checkboxes = document.querySelectorAll('#filter input[type="checkbox"]');
-	checkboxes.forEach(checkbox => {
-		checkbox.disabled = false;
-	})
+// Фильтрация товаров на основе активных чекбоксов
+function filterPens(pens, isCounting = false) {
+  const activeCheckboxes = document.querySelectorAll(
+    `input[type="checkbox"]:checked`
+  );
+  const activeFilters = {};
+  activeCheckboxes.forEach((checkbox) => {
+    activeFilters[checkbox.name] = activeFilters[checkbox.name] || [];
+    activeFilters[checkbox.name].push(checkbox.id.split("-")[1]);
+  });
 
-	disableCheckboxes.forEach(checkbox => {
-		checkbox.disabled = true;
-	})
+  // Если нет активных фильтров и не выполняется подсчёт, возвращаем все товары
+  if (!Object.keys(activeFilters).length && !isCounting) return pens;
+
+  // Возвращаем только те товары, которые соответствуют выбранным фильтрам
+  return pens.filter((pen) => {
+    return Object.keys(activeFilters).every((filterType) => {
+      return activeFilters[filterType].some((filterValue) => {
+        return pen[filterType] === filterValue;
+      });
+    });
+  });
 }
 
-function getFilteredPens(pens, filterType, values) {
-	return pens.filter(pen => values.includes(pen[filterType]));
+// Подсчёт количества товаров, соответствующих временным фильтрам
+function getCountResultsByFilter(pens, filterType, filterValue, tempFilters) {
+  return pens.filter((pen) => {
+    return (
+      Object.keys(tempFilters).every((key) => {
+        return tempFilters[key].some((filterValue) => pen[key] === filterValue);
+      }) && pen[filterType] === filterValue
+    );
+  }).length;
 }
 
-function getAllFilters(pens, filterTypes) {
-	const filters = {};
-	pens.forEach(item => {
-		Object.entries(item).forEach(([key, value]) => {
-			if (filterTypes[key]) {
-				if (!filters[key]) {
-					filters[key] = [];
-				}
-				if (!filters[key].includes(value)) {
-					filters[key].push(value);
-				}
-			}
-		})
-	})
-	return filters;
-}
-
-function getProductsByFilterValue (pens, filterValue, filterType) {
-  return pens.filter((pen) => pen[filterType] === filterValue);
-};
-
-const getUsedProductFilters = function (pens, filterTypes) {
-	const filters = {};
-	pens.forEach(item => {
-		Object.entries(item).forEach(([key, value]) => {
-			if (filterTypes[key]) {
-				if (!filters[key]) {
-					filters[key] = [];
-				}
-				filters[key].push(value);
-			}
-		})
-	})
-	return filters;
-}
-
-displayProducts(pens, filterTypes);
-displayFilters(pens, filterTypes);
-
-function getCheckboxType(checkbox) {
-	return checkbox.getAttribute('id').split('-')[0];
-}
+// Генерация значений фильтров из товаров и рендеринг
+const filterValues = generateFilterValues(pens);
+renderFilters(filterValues);
+renderProducts(pens);
