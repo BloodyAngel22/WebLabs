@@ -3,12 +3,25 @@ import { filterTypes } from "./dataList.js";
 
 console.log(pens);
 
-// Генерация значений для фильтров на основе товаров
+// Проверка и добавление отсутствующих характеристик с undefined значением
+function validatePenCharacteristics(pens) {
+  return pens.map((pen) => {
+    Object.keys(filterTypes).forEach((filterType) => {
+      if (!(filterType in pen)) {
+        pen[filterType] = `empty`; // Добавление свойства с undefined, если его нет
+      }
+    });
+    return pen;
+  });
+}
+
+// Генерация значений для фильтров на основе товаров, включая undefined
 function generateFilterValues(pens) {
   const filterValues = {};
 
   Object.keys(filterTypes).forEach((filterType) => {
-    filterValues[filterType] = [...new Set(pens.map((pen) => pen[filterType]))];
+    const values = pens.map((pen) => pen[filterType]);
+    filterValues[filterType] = [...new Set(values)];
   });
 
   return filterValues;
@@ -23,12 +36,8 @@ function renderProducts(pens) {
     pens.forEach((pen) => {
       let characteristicsHtml = "<h5>Характеристики:</h5>";
 
-			Object.keys(filterTypes).forEach((key) => {
-				// if (pen[key] === undefined) {
-				// 	characteristicsHtml += `<p>${filterTypes[key]}: не указано</p>`;
-				// 	return
-				// };
-        characteristicsHtml += `<p>${filterTypes[key]}: ${pen[key]}</p>`;
+      Object.keys(filterTypes).forEach((key) => {
+        characteristicsHtml += `<p>${filterTypes[key]}: ${pen[key] ?? "Не указано"}</p>`;
       });
 
       html += `
@@ -68,10 +77,7 @@ function renderFilter(filterType, values) {
     activeFilters[checkbox.name].push(checkbox.id.split("-")[1]);
   });
 
-	values.forEach((value) => {
-		const isUndefined = false;
-		// const isUndefined = value === undefined || value === "undefined";
-		// if (isUndefined) return;
+  values.forEach((value) => {
     const isChecked = activeFilters[filterType]?.includes(value) || false;
 
     const tempFilters = JSON.parse(JSON.stringify(activeFilters));
@@ -87,7 +93,6 @@ function renderFilter(filterType, values) {
     });
 
     const isDisabled =
-      isUndefined ||
       (!isChecked && (count === 0 || modifiedPens.length === currentPens.length))
         ? "disabled"
         : "";
@@ -135,7 +140,7 @@ function filterPens(pens, isCounting = false) {
   return pens.filter((pen) => {
     return Object.keys(activeFilters).every((filterType) => {
       return activeFilters[filterType].some((filterValue) => {
-        return pen[filterType] === filterValue;
+        return pen[filterType] === filterValue || (pen[filterType] === undefined && filterValue === "undefined");
       });
     });
   });
@@ -146,12 +151,15 @@ function getCountResultsByFilter(pens, filterType, filterValue, tempFilters) {
   return pens.filter((pen) => {
     return (
       Object.keys(tempFilters).every((key) => {
-        return tempFilters[key].some((filterValue) => pen[key] === filterValue);
+        return tempFilters[key].some((filterValue) => pen[key] === filterValue || (pen[key] === undefined && filterValue === "undefined"));
       }) && pen[filterType] === filterValue
     );
   }).length;
 }
 
-const filterValues = generateFilterValues(pens);
+// Применение проверки характеристик перед генерацией фильтров и отображением продуктов
+const validatedPens = validatePenCharacteristics(pens);
+console.log(validatedPens);
+const filterValues = generateFilterValues(validatedPens);
 renderFilters(filterValues);
-renderProducts(pens);
+renderProducts(validatedPens);

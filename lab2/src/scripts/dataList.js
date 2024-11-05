@@ -161,6 +161,7 @@ export let pens = [
 		material: 'Пластик',
 		color: 'Красный',
 		brand: 'GTONE',
+		// country: 'Китай',
 		img: '../../assets/products/pen18.webp'
 	}
 ]
@@ -170,5 +171,6 @@ export let filterTypes = {
 	inkColor: 'Цвет чернил',
 	material: 'Материал',
 	color: 'Цвет ручки',
-	brand: 'Бренд'
+	brand: 'Бренд',
+	// country: 'Страна'
 }
