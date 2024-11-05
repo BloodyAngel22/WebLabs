@@ -1,11 +1,12 @@
 import { pens } from "./dataList.js";
 import { filterTypes } from "./dataList.js";
 
-// Генерация возможных значений для фильтров на основе товаров
+console.log(pens);
+
+// Генерация значений для фильтров на основе товаров
 function generateFilterValues(pens) {
   const filterValues = {};
 
-  // Для каждого типа фильтра создаем уникальный набор значений
   Object.keys(filterTypes).forEach((filterType) => {
     filterValues[filterType] = [...new Set(pens.map((pen) => pen[filterType]))];
   });
@@ -22,8 +23,11 @@ function renderProducts(pens) {
     pens.forEach((pen) => {
       let characteristicsHtml = "<h5>Характеристики:</h5>";
 
-      // Цикл по каждому типу фильтра для отображения его значения
-      Object.keys(filterTypes).forEach((key) => {
+			Object.keys(filterTypes).forEach((key) => {
+				// if (pen[key] === undefined) {
+				// 	characteristicsHtml += `<p>${filterTypes[key]}: не указано</p>`;
+				// 	return
+				// };
         characteristicsHtml += `<p>${filterTypes[key]}: ${pen[key]}</p>`;
       });
 
@@ -49,12 +53,12 @@ function renderFilters(filterValues) {
 
 // Отображение конкретного фильтра и его значений
 function renderFilter(filterType, values) {
+
   let html = `
-	<h3>${filterTypes[filterType]}</h3>
-	<ul>`;
+    <h3>${filterTypes[filterType]}</h3>
+    <ul>`;
   const currentPens = filterPens(pens, true);
 
-  // Получаем все активные чекбоксы для текущего состояния фильтрации
   const activeCheckboxes = document.querySelectorAll(
     `input[type="checkbox"]:checked`
   );
@@ -64,17 +68,17 @@ function renderFilter(filterType, values) {
     activeFilters[checkbox.name].push(checkbox.id.split("-")[1]);
   });
 
-  // Проходим по каждому значению фильтра для отображения чекбоксов
-  values.forEach((value) => {
+	values.forEach((value) => {
+		const isUndefined = false;
+		// const isUndefined = value === undefined || value === "undefined";
+		// if (isUndefined) return;
     const isChecked = activeFilters[filterType]?.includes(value) || false;
 
-    // Создаем временные фильтры для проверки текущего значения фильтра
     const tempFilters = JSON.parse(JSON.stringify(activeFilters));
     if (!isChecked) {
       tempFilters[filterType] = [...(tempFilters[filterType] || []), value];
     }
 
-    // Подсчитываем количество товаров, соответствующих фильтру
     const count = getCountResultsByFilter(pens, filterType, value, tempFilters);
     const modifiedPens = pens.filter((pen) => {
       return Object.keys(tempFilters).every((key) => {
@@ -82,24 +86,22 @@ function renderFilter(filterType, values) {
       });
     });
 
-    // Проверка на отключение фильтра, если он не влияет на количество товаров
     const isDisabled =
-      !isChecked && (count === 0 || modifiedPens.length === currentPens.length)
+      isUndefined ||
+      (!isChecked && (count === 0 || modifiedPens.length === currentPens.length))
         ? "disabled"
         : "";
-
     html += `
-		<li>
-			<input type="checkbox" name="${filterType}" id="${filterType}-${value}" ${
+      <li>
+        <input type="checkbox" name="${filterType}" id="${filterType}-${value}" ${
       isChecked ? "checked" : ""
     } ${isDisabled}>
-			<p>${value}</p><span>(${count})</span>
-		</li>
-		`;
+        <p>${value}</p><span>(${count})</span>
+      </li>
+    `;
   });
   html += `</ul>`;
 
-  // Проверка, существует ли элемент фильтра на странице, и создание, если его нет
   let filter = document.getElementById(filterType);
   if (!filter) {
     filter = document.createElement("div");
@@ -108,12 +110,11 @@ function renderFilter(filterType, values) {
   }
   filter.innerHTML = html;
 
-  // Добавление обработчиков событий для изменения состояния фильтров
   document.querySelectorAll(`#${filterType} input`).forEach((input) => {
     input.addEventListener("change", () => {
       const filteredPens = filterPens(pens);
       renderProducts(filteredPens);
-      renderFilters(filterValues); // Обновляем фильтры для пересчёта доступных значений
+      renderFilters(filterValues);
     });
   });
 }
@@ -129,10 +130,8 @@ function filterPens(pens, isCounting = false) {
     activeFilters[checkbox.name].push(checkbox.id.split("-")[1]);
   });
 
-  // Если нет активных фильтров и не выполняется подсчёт, возвращаем все товары
   if (!Object.keys(activeFilters).length && !isCounting) return pens;
 
-  // Возвращаем только те товары, которые соответствуют выбранным фильтрам
   return pens.filter((pen) => {
     return Object.keys(activeFilters).every((filterType) => {
       return activeFilters[filterType].some((filterValue) => {
@@ -153,7 +152,6 @@ function getCountResultsByFilter(pens, filterType, filterValue, tempFilters) {
   }).length;
 }
 
-// Генерация значений фильтров из товаров и рендеринг
 const filterValues = generateFilterValues(pens);
 renderFilters(filterValues);
 renderProducts(pens);

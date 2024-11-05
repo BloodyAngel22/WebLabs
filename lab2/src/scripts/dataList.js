@@ -150,6 +150,7 @@ export let pens = [
 		inkColor: 'Красный',
 		material: 'Пластик',
 		color: 'Прозрачный',
+		brand: 'NTONE',
 		img: '../../assets/products/pen17.webp'
 	},
 	{
@@ -159,6 +160,7 @@ export let pens = [
 		inkColor: 'Красный',
 		material: 'Пластик',
 		color: 'Красный',
+		brand: 'GTONE',
 		img: '../../assets/products/pen18.webp'
 	}
 ]
@@ -167,5 +169,6 @@ export let filterTypes = {
 	penType: 'Вид ручки',
 	inkColor: 'Цвет чернил',
 	material: 'Материал',
-	color: 'Цвет ручки'
+	color: 'Цвет ручки',
+	brand: 'Бренд'
 }
