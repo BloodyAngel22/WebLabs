@@ -940,3 +940,61 @@ footer > .footer-container {
 .product-card-container > p > span {
 	font-weight: bold;
 }
+
+@media print {
+	:root {
+		font-size: 20px;
+	}
+	header, footer, .gray-rect-speech {
+		display: none;
+	}
+
+	@media (orientation: portrait) {
+		.image-container, .image-text-container, .gray-rect, .product-filter-box, .pink-rect-container {
+			height: 100vh;
+		}
+		.canyon-elem-position > h3 {
+			padding-left: 10rem;
+		}
+		.gray-rect-box > div {
+			margin-top: -6rem;
+		}
+
+		.image-container > #purple-hills {
+			height: 80vh;
+		}
+
+		.filter-box {
+			min-width: 47%;
+		}
+
+		.filter-list {
+			height: 100vh;
+			min-height: 100vh;
+			width: 83%;
+		}
+		.product-box {
+			justify-content: center;
+		}
+		.product-card-container {
+			width: 85%;
+			min-width: 85%;
+		}
+	}
+
+	@media (orientation: landscape) {
+		.image-container, .image-text-container, .gray-rect, .product-filter-box, .pink-rect-container {
+			height: 100vh;
+		}
+		.canyon-elem-position > h3 {
+			padding-left: 10rem;
+		}
+		.gray-rect-box > div {
+			margin-top: -6rem;
+		}
+
+		.image-container > #purple-hills {
+			height: 80vh;
+		}
+	}
+}
