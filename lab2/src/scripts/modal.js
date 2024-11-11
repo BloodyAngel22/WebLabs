@@ -218,14 +218,14 @@ modalHasAccount.addEventListener("click", () => {
 	loginFormContent.style.display = "block";
 })
 
-const modalLoginAccount = document.querySelector("#login-account");
-modalLoginAccount.addEventListener("click", () => {
+// const modalLoginAccount = document.querySelector("#login-account");
+// modalLoginAccount.addEventListener("click", () => {
 	// const forgotPasswordContent = document.querySelector("#forgot-password-content");
-	const loginFormContent = document.querySelector("#login-content");
+	// const loginFormContent = document.querySelector("#login-content");
 
 	// forgotPasswordContent.style.display = "none";
-	loginFormContent.style.display = "block";
-})
+// loginFormContent.style.display = "block"; 
+// })
 
 // const forgotPasswordClose = document.querySelector("#forgot-password-close");
 // forgotPasswordClose.addEventListener("click", () => {
