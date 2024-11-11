@@ -8,7 +8,7 @@ function validatePenCharacteristics(pens) {
   return pens.map((pen) => {
     Object.keys(filterTypes).forEach((filterType) => {
       if (!(filterType in pen)) {
-        pen[filterType] = `empty`; // Добавление свойства с undefined, если его нет
+        pen[filterType] = `empty`;
       }
     });
     return pen;

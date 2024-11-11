@@ -9,6 +9,85 @@
 </head>
 
 <body>
+	<div class="modal">
+		<div class="modal-content">
+			<div id="login-content">
+				<h3 class="modal-title">Вход</h3>
+				<form action="" class="modal-form" id="login-form">
+					<div class="form-data">
+						<div>
+							<label for="Username">Логин:</label>
+							<input type="text" id="login-username" placeholder="Username" required>
+						</div>
+						<div>
+							<label for="Password">Пароль:</label>
+							<input type="password" id="login-password" placeholder="Password" required>
+						</div>
+					</div>
+					<div class="modal-text">
+						<p id="no-account">У вас нет аккаунта?</p>
+						<p id="forgot-password">Забыли пароль?</p>
+					</div>
+					<div class="modal-btns">
+						<button class="modal-btn btn" id="login" type="submit">Login</button>
+						<button class="close-btn btn" id="login-close" type="button">Close</button>
+					</div>
+				</form>
+			</div>
+			<div id="register-content" style="display: none;">
+				<h3 class="modal-title">Регистрация</h3>
+				<form action="" class="modal-form" id="register-form">
+					<div class="form-data">
+						<div>
+							<label for="Username">Логин:</label>
+							<input type="text" id="register-username" placeholder="Username" required>
+						</div>
+						<div>
+							<label for="Password">Пароль:</label>
+							<input type="password" id="register-password" placeholder="Password" required>
+						</div>
+						<div>
+							<label for="CheckPassword">Пароль:</label>
+							<input type="password" id="check-password" placeholder="Password" required>
+						</div>
+						<div>
+							<label for="Email">Почта:</label>
+							<input type="text" id="email" placeholder="Email" required>
+						</div>
+					</div>
+					<div class="modal-text">
+						<p id="has-account">У вас есть аккаунт?</p>
+					</div>
+					<div class="modal-btns">
+						<button class="modal-btn btn" id="register" type="submit">Register</button>
+						<button class="close-btn btn" id="register-close" type="button">Close</button>
+					</div>
+				</form>
+			</div>
+			<div id="forgot-password-content" style="display: none;">
+				<h3 class="modal-title">Восстановление пароля</h3>
+				<form action="" class="modal-form" id="forgot-password-form">
+					<div class="form-data">
+						<div>
+							<label for="Username">Логин:</label>
+							<input type="text" id="forgot-username" placeholder="Username" required>
+						</div>
+						<div>
+							<label for="Email">Почта:</label>
+							<input type="text" id="forgot-email" placeholder="Email" required>
+						</div>
+					</div>
+					<div class="modal-text">
+						<p id="login-account">Вы вспомнили пароль?</p>
+					</div>
+					<div class="modal-btns">
+						<button class="modal-btn btn" id="forgot-password-send" type="submit">Send</button>
+						<button class="close-btn btn" id="forgot-password-close" type="button">Close</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 	<header>
 		<div class="header-content">
 			<div class="logo-container">
@@ -25,6 +104,7 @@
 						<li><a href="#">Services</a></li>
 						<li><a href="#">FAQ</a></li>
 						<li><a href="#">Contact</a></li>
+						<li><button class="white-btn btn" id="modal">Login</button></li>
 					</ul>
 					<input type="text" placeholder="Search Website" class="search-input">
 				</div>
@@ -38,7 +118,7 @@
 			<div class=" overlay full-width-height">
 			<div class="canyon-elem-position">
 				<h3>Designs your eyeballs will thank you for</h3>
-				<button class="purple-btn btn">Get Started Today</button>
+				<button class="purple-btn btn" id="session-check">Get Started Today</button>
 				<p>Lorem ipsum dolor sit amet consectetur.</p>
 			</div>
 		</div>
@@ -112,7 +192,7 @@
 					</p>
 			</div>
 		</div>
-		<div class="product-filter-box">
+		<div class="product-filter-box" style="display: none;">
 			<div class="filter-box">
 				<h4>Product Filter</h4>
 				<div id="filter" class="filter-list">
@@ -189,4 +269,6 @@
 	</footer>
 </body>
 <script type="module" src="scripts/main.js"></script>
+<script type="module" src="scripts/modal.js"></script>
+<script type="module" src="scripts/secure.js"></script>
 </html>

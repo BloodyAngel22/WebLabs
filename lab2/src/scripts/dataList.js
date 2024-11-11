@@ -6,7 +6,7 @@ export let pens = [
 		inkColor: "Черный",
 		material: "Металл",
 		color: "Серебристый",
-		img: "../../assets/products/pen1.webp"
+		img: "/assets/products/pen1.webp"
 	},
 	{
 		id: 2,
@@ -15,7 +15,7 @@ export let pens = [
 		inkColor: "Черный",
 		material: "Металл",
 		color: "Серебристый",
-		img: "../../assets/products/pen2.webp"
+		img: "/assets/products/pen2.webp"
 	},
 	{
 		id: 3,
@@ -24,7 +24,7 @@ export let pens = [
 		inkColor: "Черный",
 		material: "Металл",
 		color: "Серебристый",
-		img: "../../assets/products/pen3.webp"
+		img: "/assets/products/pen3.webp"
 	},
 	{
 		id: 4,
@@ -33,7 +33,7 @@ export let pens = [
 		inkColor: "Черный",
 		material: "Пластик",
 		color: "Серебристый",
-		img: "../../assets/products/pen4.webp"
+		img: "/assets/products/pen4.webp"
 	},
 	{
 		id: 5,
@@ -42,7 +42,7 @@ export let pens = [
 		inkColor: "Черный",
 		material: "Пластик",
 		color: "Черный",
-		img: "../../assets/products/pen5.webp"
+		img: "/assets/products/pen5.webp"
 	},
 	{
 		id: 6,
@@ -51,7 +51,7 @@ export let pens = [
 		inkColor: "Черный",
 		material: "Пластик",
 		color: "Синий",
-		img: "../../assets/products/pen6.webp"
+		img: "/assets/products/pen6.webp"
 	},
 	{
 		id: 7,
@@ -60,7 +60,7 @@ export let pens = [
 		inkColor: "Черный",
 		material: "Металл",
 		color: "Серебристый",
-		img: "../../assets/products/pen7.webp"
+		img: "/assets/products/pen7.webp"
 	},
 	{
 		id: 8,
@@ -69,7 +69,7 @@ export let pens = [
 		inkColor: "Черный",
 		material: "Металл",
 		color: "Серебристый",
-		img: "../../assets/products/pen8.webp"
+		img: "/assets/products/pen8.webp"
 	},
 	{
 		id: 9,
@@ -78,7 +78,7 @@ export let pens = [
 		inkColor: "Черный",
 		material: "Пластик",
 		color: "Белый",
-		img: "../../assets/products/pen9.webp"
+		img: "/assets/products/pen9.webp"
 	},
 	{
 		id: 10,
@@ -87,7 +87,7 @@ export let pens = [
 		inkColor: "Черный",
 		material: "Пластик",
 		color: "Прозрачный",
-		img: "../../assets/products/pen10.webp"
+		img: "/assets/products/pen10.webp"
 	},
 	{
 		id: 11,
@@ -96,7 +96,7 @@ export let pens = [
 		inkColor: "Синий",
 		material: "Пластик",
 		color: "Синий",
-		img: "../../assets/products/pen11.webp"
+		img: "/assets/products/pen11.webp"
 	},
 	{
 		id: 12,
@@ -105,7 +105,7 @@ export let pens = [
 		inkColor: "Синий",
 		material: "Пластик",
 		color: "Черный",
-		img: "../../assets/products/pen12.webp"
+		img: "/assets/products/pen12.webp"
 	},
 	// {
 	// 	id: 13,
@@ -132,7 +132,7 @@ export let pens = [
 		inkColor: 'Синий',
 		material: 'Металл',
 		color: 'Черный',
-		img: '../../assets/products/pen15.webp'
+		img: '/assets/products/pen15.webp'
 	},
 	{
 		id: 16,
@@ -141,7 +141,7 @@ export let pens = [
 		inkColor: 'Синий',
 		material: 'Пластик',
 		color: 'Серебристый',
-		img: '../../assets/products/pen16.webp'
+		img: '/assets/products/pen16.webp'
 	},
 	{
 		id: 17,
@@ -151,7 +151,7 @@ export let pens = [
 		material: 'Пластик',
 		color: 'Прозрачный',
 		brand: 'NTONE',
-		img: '../../assets/products/pen17.webp'
+		img: '/assets/products/pen17.webp'
 	},
 	{
 		id: 18,
@@ -161,8 +161,8 @@ export let pens = [
 		material: 'Пластик',
 		color: 'Красный',
 		brand: 'GTONE',
-		// country: 'Китай',
-		img: '../../assets/products/pen18.webp'
+		country: 'Китай',
+		img: '/assets/products/pen18.webp'
 	}
 ]
 
@@ -172,5 +172,5 @@ export let filterTypes = {
 	material: 'Материал',
 	color: 'Цвет ручки',
 	brand: 'Бренд',
-	// country: 'Страна'
+	country: 'Страна'
 }
