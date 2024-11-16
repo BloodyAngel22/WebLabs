@@ -157,9 +157,10 @@ function getCountResultsByFilter(pens, filterType, filterValue, tempFilters) {
   }).length;
 }
 
-// Применение проверки характеристик перед генерацией фильтров и отображением продуктов
-const validatedPens = validatePenCharacteristics(pens);
-console.log(validatedPens);
-const filterValues = generateFilterValues(validatedPens);
-renderFilters(filterValues);
-renderProducts(validatedPens);
+// const validatedPens = validatePenCharacteristics(pens);
+// console.log(validatedPens);
+// const filterValues = generateFilterValues(validatedPens);
+// renderFilters(filterValues);
+// renderProducts(validatedPens);
+
+export { validatePenCharacteristics, generateFilterValues, renderProducts, renderFilters, filterPens, getCountResultsByFilter, pens };

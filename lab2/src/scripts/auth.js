@@ -19,18 +19,17 @@ const registerUser = async (username, password, email) => {
 
 		const data = await response.json();
 		console.log(data);
-		return data; // Возвращаем данные
+		return data; 
 	} catch (error) {
 		console.error('Fetch error:', error);
 	}
 }
 
-//TODO:
 const loginUser = async (username, password) => {
 	try {
 		const response = await fetch('Auth.php', {
 			method: 'POST',
-			credentials: 'include',  // cookies будут получены от сервера
+			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -80,4 +79,22 @@ const logoutUser = async () => {
 	}
 }
 
-export { registerUser, loginUser, getSomeData, logoutUser };
+const forgotPassword = async (email) => {
+	try {
+		const response = await fetch('Auth.php', {
+			method: 'POST',
+			credentials: 'include',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ action: "forgot", email: email })
+		});
+		const data = await response.json();
+		console.log(data);
+		return data;
+	} catch (error) {
+		console.error('Fetch error:', error);
+	}
+}
+
+export { registerUser, loginUser, getSomeData, logoutUser, forgotPassword };

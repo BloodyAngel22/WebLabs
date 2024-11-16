@@ -26,7 +26,7 @@
 					</div>
 					<div class="modal-text">
 						<p id="no-account">У вас нет аккаунта?</p>
-						<!-- <p id="forgot-password">Забыли пароль?</p> -->
+						<p id="forgot-password">Забыли пароль?</p>
 					</div>
 					<div class="modal-btns">
 						<button class="modal-btn btn" id="login" type="submit">Login</button>
@@ -64,14 +64,10 @@
 					</div>
 				</form>
 			</div>
-			<!-- <div id="forgot-password-content" style="display: none;">
+			<div id="forgot-password-content" style="display: none;">
 				<h3 class="modal-title">Восстановление пароля</h3>
 				<form action="" class="modal-form" id="forgot-password-form">
 					<div class="form-data">
-						<div>
-							<label for="Username">Логин:</label>
-							<input type="text" id="forgot-username" placeholder="Username" required>
-						</div>
 						<div>
 							<label for="Email">Почта:</label>
 							<input type="text" id="forgot-email" placeholder="Email" required>
@@ -85,7 +81,7 @@
 						<button class="close-btn btn" id="forgot-password-close" type="button">Close</button>
 					</div>
 				</form>
-			</div> -->
+			</div>
 		</div>
 	</div>
 	<header>
@@ -106,6 +102,7 @@
 						<li><a href="#">Contact</a></li>
 						<li id="login-modal"><button class="white-btn btn" id="modal">Login</button></li>
 						<li id="account" style="display: none;"><a href="account.php">Account</a></li>
+						<li id="avatar-container" style="display: none;"><img class="user-avatar" id="avatar" src="" alt="avatar"></li>
 						<li id="logout-modal" style="display: none;"><button class="white-btn btn" id="logout">Logout</button></li>
 					</ul>
 					<input type="text" placeholder="Search Website" class="search-input">
@@ -270,6 +267,6 @@
 		</div>
 	</footer>
 </body>
-<script type="module" src="scripts/main.js"></script>
+<!-- <script type="module" src="scripts/main.js"></script> -->
 <script type="module" src="scripts/modal.js"></script>
 </html>

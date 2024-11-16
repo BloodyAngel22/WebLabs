@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 	header("Access-Control-Allow-Headers: Content-Type");
 	header("Access-Control-Allow-Credentials: true");
 	header("Content-Type: application/json");
-	exit; // Завершите выполнение скрипта для OPTIONS запроса
+	exit;
 }
 
 ini_set('display_errors', 1);
@@ -48,8 +48,8 @@ try {
 			logout();
 			break;
 
-		case 'reset_password':
-			reset_password();
+		case 'forgot':
+			forgot();
 			break;
 
 		default:
@@ -68,7 +68,6 @@ function register()
 
 	$username = pg_escape_string($db_connect, $input['username']) ?? '';
 
-	// Проверка на существование пользователя
 	$query = "SELECT * FROM users WHERE username = '$username'";
 	$result = pg_query($db_connect, $query);
 
@@ -82,7 +81,6 @@ function register()
 		exit;
 	}
 
-	// Проверка на пустые поля
 	if (!isset($input['username']) || !isset($input['password']) || !isset($input['email'])) {
 		echo json_encode(['error' => 'All fields are required']);
 		exit;
@@ -90,13 +88,11 @@ function register()
 
 	$email = pg_escape_string($db_connect, $input['email']) ?? '';
 
-	// Проверка на валидность email
 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 		echo json_encode(['error' => 'Invalid email']);
 		exit;
 	}
 
-	// Проверка на существование email
 	$query = "SELECT * FROM users WHERE email = '$email'";
 	$result = pg_query($db_connect, $query);
 
@@ -110,13 +106,10 @@ function register()
 		exit;
 	}
 
-	// Хеширование пароля
 	$hashed_password = password_hash($input['password'], PASSWORD_BCRYPT);
 
-	// Получаем IP пользователя
 	$ip = $_SERVER['REMOTE_ADDR'];
 
-	// Вставка нового пользователя в базу данных
 	$query = "INSERT INTO users (username, password_hash, email, ip) VALUES ('$username', '$hashed_password', '$email', '$ip')";
 
 	if (!pg_query($db_connect, $query)) {
@@ -133,10 +126,12 @@ function login()
 
 	$input = json_decode(file_get_contents('php://input'), true);
 
+	//FIXME: Не безопасно
+	// $username = $input['username'];
+
 	$username = pg_escape_string($db_connect, $input['username']) ?? '';
 	$password = pg_escape_string($db_connect, $input['password']) ?? '';
 
-	// Поиск пользователя по имени
 	$query = "SELECT * FROM users WHERE username = '$username'";
 
 	if (!$result = pg_query($db_connect, $query)) {
@@ -147,51 +142,97 @@ function login()
 	if ($result && pg_num_rows($result) > 0) {
 		$user = pg_fetch_assoc($result);
 
-		// Проверка пароля
 		if (password_verify($password, $user['password_hash'])) {
 			//Cookies
 			setcookie('auth_token_id', $user['id'], [
 				'expires' => time() + 3600 * 24,
 				'path' => '/',
-				'secure' => false,
-				'sameSite' => 'Lax',
+
 			]);
 
 			setcookie('auth_token_pass_hash', $user['password_hash'], [
 				'expires' => time() + 3600 * 24,
 				'path' => '/',
-				'secure' => false,
-				'sameSite' => 'Lax',
+
 			]);
 
 			echo json_encode(['message'=> 'User logged in successfully']);
 
-			return; // Завершаем выполнение функции
+			return;
 		} else {
 			echo json_encode(['error' => 'Invalid password']);
-			return; // Завершаем выполнение функции
+			return; 
 		}
 
 	} else {
 		echo json_encode(['error' => 'User not found']);
-		return; // Завершаем выполнение функции
+		return;
 	}
 }
 
 function logout()
 {
 	//Cookies
-	setcookie('auth_token_id', "", time() - 3600 * 24, '/'); // Удаление куки
+	setcookie('auth_token_id', "", time() - 3600 * 24, '/');
 	setcookie('auth_token_pass_hash', "", time() - 3600 * 24, '/');
+
+	setcookie("email", "", time() - 3600 / 2,"/");
+	setcookie("reset-url", "", time() - 3600 / 2,"/");
 
 	echo json_encode(['message' => 'User logged out successfully']);
 }
 
-function reset_password()
+
+function generateRandomString($length = 10)
 {
-	// Логика сброса пароля (не реализована)
+	$randomized = new \Random\Randomizer();
+	$length = 20;
+	$randomString = $randomized->getBytesFromString('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', $length);
+	return $randomString;
 }
 
-// Закрываем соединение с базой данных
+function forgot()
+{
+	$input = json_decode(file_get_contents('php://input'), true);
+	$email = $input['email'];
+
+	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		echo json_encode(['error'=> 'Not valid email']);
+		return;
+	}
+
+	$resetToken = generateRandomString(16);
+	$url = "http://lab4.local:5005/reset_password.php?token=" . $resetToken;
+
+	$userId = getUserIdByEmail($email);
+	setcookie("id", $userId, time() + 3600 / 2,"/");
+	//Не безопасно
+	// setcookie("email", $email, time() + 3600 / 2,"/");
+	setcookie("reset-url", $url, time() + 3600 / 2,"/");
+
+	echo json_encode(['message' => 'The password recovery link has been successfully created. Redirect to the link?', 'url' => $url]);
+}
+
+function getUserIdByEmail($email)
+{
+	global $db_connect;
+	$query = "SELECT id FROM users WHERE email = $1";
+	$result = pg_query_params($db_connect, $query, array($email));
+
+	if (!$result) {
+		echo json_encode(["error"=> "Error: " . pg_last_error($db_connect)]);
+		exit;
+	}
+
+	if (pg_num_rows($result) == 0) {
+		echo json_encode(["error"=> "User not found"]);
+		exit;
+	}
+	$row = pg_fetch_assoc($result);
+	$user = $row;
+
+	return $user['id'];
+}
+
 pg_close($db_connect);
 ?>

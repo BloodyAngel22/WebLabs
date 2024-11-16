@@ -25,7 +25,6 @@ if (isset($_COOKIE['auth_token_id']) && isset($_COOKIE['auth_token_pass_hash']))
 			exit;
 		}
 
-		// echo "<div>" . "Hello, " . $user['username'] . "!" . "</div>";
 	} else {
 		header('Location: index.php');
 		exit;
@@ -72,7 +71,8 @@ if (isset($_COOKIE['auth_token_id']) && isset($_COOKIE['auth_token_pass_hash']))
 	}
 
 	.container {
-		height: 100vh;
+		min-height: 100vh;
+		height: auto;
 		width: 100vw;
 		display: flex;
 		flex-direction: column;
@@ -146,9 +146,17 @@ if (isset($_COOKIE['auth_token_id']) && isset($_COOKIE['auth_token_pass_hash']))
 		}
 
 	}
+
 	a.redirect {
 		text-decoration: none;
 		color: inherit;
+	}
+
+	img {
+		width: 3rem;
+		height: 3rem;
+		border-radius: 50%;
+		object-fit: cover;
 	}
 </style>
 
@@ -161,7 +169,11 @@ if (isset($_COOKIE['auth_token_id']) && isset($_COOKIE['auth_token_pass_hash']))
 			<h3>Сменить данные</h3>
 			<form action="" method="post">
 				<div>
-					<label for="change-password">Password</label>
+					<label for="previous-password">Previous password</label>
+					<input type="password" id="previous-password" placeholder="Password">
+				</div>
+				<div>
+					<label for="change-password">New Password</label>
 					<input type="password" id="change-password" placeholder="Password">
 				</div>
 				<div>
@@ -181,8 +193,13 @@ if (isset($_COOKIE['auth_token_id']) && isset($_COOKIE['auth_token_pass_hash']))
 					<input type="text" id="change-patronymic" placeholder="Patronymic">
 				</div>
 				<div>
-					<label for="change-avatar">Avatar</label>
+					<label for="current-avatar">Current avatar</label>
+					<img src="" alt="none" id="current-avatar">
+				</div>
+				<div>
+					<label for="change-avatar">New Avatar</label>
 					<input type="file" id="change-avatar" placeholder="Avatar">
+					<img id="img-avatar" src="" alt="none">
 				</div>
 				<div class="modal-btns">
 					<button class="change-btn" type="submit">Change</button>
@@ -192,18 +209,29 @@ if (isset($_COOKIE['auth_token_id']) && isset($_COOKIE['auth_token_pass_hash']))
 		</div>
 	</div>
 
-	<script>
+	<script type="module">
+		import { getUserAvatar } from '/scripts/getUserAvatar.js';
+		const previousPassword = document.getElementById('previous-password');
 		const changeFirstname = document.getElementById('change-firstname');
 		const changeSurname = document.getElementById('change-surname');
 		const changePatronymic = document.getElementById('change-patronymic');
 		const changePassword = document.getElementById('change-password');
 		const checkPassword = document.getElementById('check-password');
 		const avatar = document.getElementById('change-avatar');
+		const currentAvatar = document.getElementById('current-avatar');
 
-		document.addEventListener('DOMContentLoaded', () => {
+		document.addEventListener('DOMContentLoaded', async () => {
 			changeFirstname.value = '<?php echo $user['firstname']; ?>';
 			changeSurname.value = '<?php echo $user['surname']; ?>';
 			changePatronymic.value = '<?php echo $user['patronymic']; ?>';
+
+			const avatarUrl = await getUserAvatar('<?php echo $user['id']; ?>');
+			currentAvatar.src = avatarUrl;
+		})
+
+		avatar.addEventListener('change', () => {
+			const imgAvatar = document.getElementById('img-avatar');
+			imgAvatar.src = URL.createObjectURL(avatar.files[0]);
 		})
 
 		document.querySelector('form').addEventListener('submit', async (event) => {
@@ -216,32 +244,40 @@ if (isset($_COOKIE['auth_token_id']) && isset($_COOKIE['auth_token_pass_hash']))
 				return;
 			}
 
-			const data = await sendChangeData(changeFirstname.value, changeSurname.value, changePatronymic.value, changePassword.value, avatar.value);
+			const data = await sendChangeData(changeFirstname.value, changeSurname.value, changePatronymic.value, changePassword.value, avatar.files[0]);
 			console.log(data);
-			
+
 			if (data.error) {
 				alert(data.error);
 			}
 
 			if (data.message) {
+				const avatarUrl = await getUserAvatar('<?php echo $user['id']; ?>');
+				currentAvatar.src = avatarUrl;
+				avatar.value = '';
+				const imgAvatar = document.getElementById('img-avatar');
+				imgAvatar.src = '';
 				alert(data.message);
 			}
 		});
 
-		const sendChangeData = async (changeFirstname, changeSurname, changePatronymic, changePassword, avatar) => {
+		const sendChangeData = async (changeFirstname, changeSurname, changePatronymic, changePassword, avatarFile) => {
 			try {
+				const formData = new FormData();
+				formData.append('previousPassword', previousPassword.value);
+				formData.append('firstname', changeFirstname);
+				formData.append('surname', changeSurname);
+				formData.append('patronymic', changePatronymic);
+				formData.append('password', changePassword);
+
+				if (avatarFile) {
+					formData.append('image', avatarFile);
+					console.log(avatarFile);
+				}
+
 				const response = await fetch('changeData.php', {
 					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						firstname: changeFirstname ?? null,
-						surname: changeSurname ?? null,
-						patronymic: changePatronymic ?? null,
-						password: changePassword ?? null,
-						avatar: avatar ??null
-					}),
+					body: formData,
 					credentials: 'include'
 				});
 
@@ -252,6 +288,7 @@ if (isset($_COOKIE['auth_token_id']) && isset($_COOKIE['auth_token_pass_hash']))
 				alert('Произошла ошибка!');
 			}
 		}
+
 	</script>
 </body>
 

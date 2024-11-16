@@ -29,51 +29,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$user = pg_fetch_assoc($result);
 
 			if ($auth_token_id === $user['id'] && $auth_token_pass_hash === $user['password_hash']) {
-				$data = json_decode(file_get_contents('php://input'), true);
+				$previousPassword = $_POST['previousPassword'] ?? '';
+				$checkPasswordResult;
+				if (!empty($previousPassword)) {
+					$checkPasswordResult = password_verify($previousPassword, $user['password_hash']);
 
-				$firstname = isset($data['firstname']) ? $data['firstname'] : $user['firstname'];
-				$surname = isset($data['surname']) ? $data['surname'] : $user['surname'];
-				$patronymic = isset($data['patronymic']) ? $data['patronymic'] : $user['patronymic'];
+					if ($checkPasswordResult == false) {
+						echo json_encode(['error'=> 'Invalid password']);
+						exit;
+					}
+				}
 
-				$updateFields = [];
-				$updateValues = [$firstname, $surname, $patronymic];
-
-				$updateQuery = "UPDATE users SET 
-                                firstname = $1, 
-                                surname = $2, 
-                                patronymic = $3";
+				$firstname = $_POST['firstname'] ?? $user['firstname'];
+				$surname = $_POST['surname'] ?? $user['surname'];
+				$patronymic = $_POST['patronymic'] ?? $user['patronymic'];
 
 				$new_password_hash = null;
-				if (!empty($data['password'])) {
-					$new_password_hash = password_hash($data['password'], PASSWORD_BCRYPT);
-					$updateQuery .= ", password_hash = $4";
+				if (!empty($_POST['password'])) {
+					$new_password_hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
+				}
+
+				$imageBinary = null;
+				if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+					$fileType = mime_content_type($_FILES['image']['tmp_name']);
+					if (strpos($fileType, 'image/') !== 0) {
+						echo json_encode(['error' => 'Uploaded file is not an image.']);
+						exit;
+					}
+
+					$imageBinary = file_get_contents($_FILES['image']['tmp_name']);
+				}
+
+				$updateFields = [
+					"firstname = $1",
+					"surname = $2",
+					"patronymic = $3"
+				];
+				$updateValues = [$firstname, $surname, $patronymic];
+
+				if ($new_password_hash) {
+					$updateFields[] = "password_hash = $" . (count($updateValues) + 1);
 					$updateValues[] = $new_password_hash;
 				}
 
-				$updateQuery .= " WHERE id = $" . (count($updateValues) + 1);
+				if ($imageBinary !== null) {
+					$updateFields[] = "image = $" . (count($updateValues) + 1);
+					$updateValues[] = pg_escape_bytea($imageBinary);
+				}
+
+				$updateQuery = "UPDATE users SET " . implode(", ", $updateFields) . " WHERE id = $" . (count($updateValues) + 1);
 				$updateValues[] = $auth_token_id;
 
 				$updateResult = pg_query_params($db_connect, $updateQuery, $updateValues);
 
 				if ($updateResult) {
-					$response = [
-						'message' => 'User data updated successfully',
-						'data' => [
-							'firstname' => $firstname,
-							'surname' => $surname,
-							'patronymic' => $patronymic,
-							'password_changed' => !empty($data['password'])
-						]
-					];
-
+					echo json_encode(['message' => 'User data updated successfully']);
 					if ($new_password_hash) {
-						// Обновляем куки с новым хешем пароля и id
-						setcookie('auth_token_id', $_COOKIE['auth_token_id'], time() + 3600 * 24, "/", );
-						setcookie('auth_token_pass_hash', $new_password_hash, time() + 3600 * 24, "/", ); 
-						$response['new_auth_token'] = $new_password_hash;
+						setcookie('auth_token_id', $user['id'], time() + 3600 * 24, '/');
+						setcookie('auth_token_pass_hash', $new_password_hash, time() + 3600 * 24, '/');
 					}
-
-					echo json_encode($response);
 				} else {
 					echo json_encode(['error' => 'Failed to update user data: ' . pg_last_error($db_connect)]);
 				}
