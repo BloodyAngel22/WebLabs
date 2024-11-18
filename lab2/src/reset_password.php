@@ -11,6 +11,30 @@ if (empty($_COOKIE["id"]) || empty($_COOKIE["reset-url"])) {
 	exit;
 }
 
+$connect_data = "host=localhost port=5432 dbname=php_auth user=postgres password=postgres";
+$conn = pg_connect($connect_data);
+
+if (!$conn) {
+	header("Location: index.php");
+	exit;
+}
+$id = $_COOKIE["id"];
+$query = "SELECT COUNT(*) FROM users WHERE id = $1";
+$result = pg_query_params($conn, $query, array($id));
+
+if (!$result) {
+	header("Location: index.php");
+	exit;
+}
+
+$row = pg_fetch_row($result);
+if ($row[0] == 0) {
+	header("Location: index.php");
+} 
+pg_free_result($result);
+pg_close($conn);
+//TODO: сделать проверку на существующего пользователя и подумать насчет валидации url.
+
 ?>
 
 <!DOCTYPE html>
